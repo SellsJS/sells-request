@@ -1,32 +1,31 @@
 import axios, { AxiosRequestConfig } from "axios";
 
-function handleAxiosError(error: any) {
+function handleAxiosError(error: any): Error {
   if (axios.isAxiosError(error)) {
     const message = error.response?.data?.message || error.message;
-    console.error(`Axios Error: ${message}`);
-    throw new Error(message);
+    return new Error(message);
   }
-  console.error("Unexpected Error:", error);
-  throw error;
+  return new Error('Unexpected Error: ' + (error?.message || String(error)));
+}
+
+function getEnvVar(key: string): string | undefined {
+  return process.env[key];
 }
 
 function resolveBaseUrl(base: string): string {
-  if (base.startsWith("http")) return base;
+  if (base.startsWith("http")) return base + '/';
 
   const envKey = base.toUpperCase();
-  const value =
-    typeof import.meta !== "undefined"
-      ? import.meta.env?.[envKey]
-      : process.env?.[envKey];
+  const value = getEnvVar(envKey);
 
   if (!value) {
     throw new Error(`Base URL "${base}" not found in environment variables.`);
   }
 
-  return value;
+  return value + '/';
 }
 
-export const request = {
+export const httpClient = {
   get: async <T>(
     baseUrl: string,
     path: string,
@@ -35,7 +34,7 @@ export const request = {
     try {
       return await axios.get<T>(`${resolveBaseUrl(baseUrl)}${path}`, config);
     } catch (error) {
-      handleAxiosError(error);
+      throw handleAxiosError(error);
     }
   },
 
@@ -48,7 +47,7 @@ export const request = {
     try {
       return axios.post<T>(`${resolveBaseUrl(baseUrl)}${path}`, data, config);
     } catch(error) {
-      handleAxiosError(error);
+      throw handleAxiosError(error);
     }
   },
 
@@ -61,7 +60,7 @@ export const request = {
     try {
       return axios.put<T>(`${resolveBaseUrl(baseUrl)}${path}`, data, config);
     } catch (error) {
-      handleAxiosError(error);
+      throw handleAxiosError(error);
     }
   },
 
@@ -69,7 +68,7 @@ export const request = {
     try {
       return axios.delete<T>(`${resolveBaseUrl(baseUrl)}${path}`, config);
     } catch (error) {
-      handleAxiosError(error);
+      throw handleAxiosError(error);
     }
   },
 };

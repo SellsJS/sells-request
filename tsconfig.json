@@ -1,13 +1,14 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
-    "module": "ESNext",
-    "moduleResolution": "Node",
+    "target": "es2020",
+    "module": "es2020",
+    "moduleResolution": "node",
+    "lib": ["es2020", "dom"],
     "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
     "strict": true,
-    "outDir": "dist",
-    "rootDir": "src",
-    "baseUrl": "."
+    "outDir": "dist"
   },
-  "include": ["src"]
+  "include": ["src", "tests"]
 }
