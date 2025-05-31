@@ -1,0 +1,10 @@
+tests
+src
+.git
+.github
+.vscode
+tsconfig.json
+jest.config.js
+README.md
+*.test.ts
+*.test.js
