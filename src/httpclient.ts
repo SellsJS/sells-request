@@ -28,7 +28,7 @@ function resolveBaseUrl(base: string): string {
 export const httpClient = {
   get: async <T>(
     baseUrl: string,
-    path: string,
+    path: string = '',
     config: AxiosRequestConfig = {}
   ) => {
     try {
@@ -40,7 +40,7 @@ export const httpClient = {
 
   post: <T>(
     baseUrl: string,
-    path: string,
+    path: string = '',
     data: any,
     config: AxiosRequestConfig = {}
   ) => {
@@ -53,7 +53,7 @@ export const httpClient = {
 
   put: <T>(
     baseUrl: string,
-    path: string,
+    path: string = '',
     data: any,
     config: AxiosRequestConfig = {}
   ) => {
@@ -64,7 +64,7 @@ export const httpClient = {
     }
   },
 
-  delete: <T>(baseUrl: string, path: string, config: AxiosRequestConfig = {}) =>{
+  delete: <T>(baseUrl: string, path: string = '', config: AxiosRequestConfig = {}) =>{
     try {
       return axios.delete<T>(`${resolveBaseUrl(baseUrl)}${path}`, config);
     } catch (error) {
